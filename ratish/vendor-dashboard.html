@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Dashboard - RatishPlug</title>
+    <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+    <link rel="apple-touch-icon" href="assets/icons/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+    <script src="supabase.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">
+                <img src="assets/icons/favicon.png" alt="RatishPlug" class="nav-logo">
+                <span class="nav-title">RatishPlug</span>
+            </a>
+            <div class="nav-menu">
+                <span id="vendorName" class="nav-link"></span>
+                <button onclick="logoutVendor()" class="nav-link btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="dashboard-layout">
+            <!-- Sidebar -->
+            <aside class="dashboard-sidebar">
+                <nav class="sidebar-nav">
+                    <a href="#profile" class="sidebar-link active" data-section="profile">
+                        <i class="fas fa-user-circle"></i> Profile
+                    </a>
+                    <a href="#delivery-zones" class="sidebar-link" data-section="delivery-zones">
+                        <i class="fas fa-map-marker-alt"></i> Delivery Zones
+                    </a>
+                    <a href="#products" class="sidebar-link" data-section="products">
+                        <i class="fas fa-box"></i> Products
+                    </a>
+                    <a href="#orders" class="sidebar-link" data-section="orders">
+                        <i class="fas fa-shopping-bag"></i> Orders
+                    </a>
+                    <a href="#analytics" class="sidebar-link" data-section="analytics">
+                        <i class="fas fa-chart-line"></i> Analytics
+                    </a>
+                    <a href="#settings" class="sidebar-link" data-section="settings">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="dashboard-main">
+                <!-- Profile Section -->
+                <section id="profile-section" class="dashboard-section active">
+                    <h1>My Business Profile</h1>
+                    <div class="dashboard-card">
+                        <form id="profileForm" class="form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="businessName">Business Name</label>
+                                    <input type="text" id="businessName" name="businessName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="businessCategory">Category</label>
+                                    <select id="businessCategory" name="businessCategory">
+                                        <option value="food">Food &amp; Beverages</option>
+                                        <option value="retail">Retail &amp; Fashion</option>
+                                        <option value="electronics">Electronics</option>
+                                        <option value="services">Services</option>
+                                        <option value="grocery">Grocery &amp; Supplies</option>
+                                        <option value="handmade">Handmade &amp; Crafts</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Business Description</label>
+                                <textarea id="description" name="description" rows="4"></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contactPhone">Phone</label>
+                                    <input type="tel" id="contactPhone" name="contactPhone">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactEmail">Email</label>
+                                    <input type="email" id="contactEmail" name="contactEmail">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="businessAddress">Business Address</label>
+                                <input type="text" id="businessAddress" name="businessAddress">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="openingTime">Opening Time</label>
+                                    <input type="time" id="openingTime" name="openingTime">
+                                </div>
+                                <div class="form-group">
+                                    <label for="closingTime">Closing Time</label>
+                                    <input type="time" id="closingTime" name="closingTime">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="deliveryRadius">Delivery Radius (km)</label>
+                                <input type="number" id="deliveryRadius" name="deliveryRadius" min="1" max="50">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Delivery Zones Section -->
+                <section id="delivery-zones-section" class="dashboard-section">
+                    <h1>Delivery Zones</h1>
+                    <div class="dashboard-card">
+                        <h2>Active Delivery Zones</h2>
+                        <div class="zones-list">
+                            <div class="zone-item">
+                                <div class="zone-info">
+                                    <h3>Zone North</h3>
+                                    <p>Coverage: 5 km radius</p>
+                                </div>
+                                <div class="zone-actions">
+                                    <button class="btn btn-small btn-secondary">Edit</button>
+                                    <button class="btn btn-small btn-danger">Remove</button>
+                                </div>
+                            </div>
+                            <div class="zone-item">
+                                <div class="zone-info">
+                                    <h3>Zone Central</h3>
+                                    <p>Coverage: 3 km radius</p>
+                                </div>
+                                <div class="zone-actions">
+                                    <button class="btn btn-small btn-secondary">Edit</button>
+                                    <button class="btn btn-small btn-danger">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2 style="margin-top: 30px;">Add New Zone</h2>
+                        <form id="zoneForm" class="form">
+                            <div class="form-group">
+                                <label for="zoneName">Zone Name</label>
+                                <input type="text" id="zoneName" name="zoneName" placeholder="e.g., Downtown">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="zoneRadius">Radius (km)</label>
+                                    <input type="number" id="zoneRadius" name="zoneRadius" min="1" max="50">
+                                </div>
+                                <div class="form-group">
+                                    <label for="zoneFee">Delivery Fee</label>
+                                    <input type="number" id="zoneFee" name="zoneFee" min="0" step="0.01" placeholder="$0.00">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Zone</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Products Section -->
+                <section id="products-section" class="dashboard-section">
+                    <h1>Products &amp; Services</h1>
+                    <div class="dashboard-card">
+                        <button class="btn btn-primary" onclick="showAddProductModal()">
+                            <i class="fas fa-plus"></i> Add Product
+                        </button>
+
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center">No products yet. Add your first product!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="orders-section" class="dashboard-section">
+                    <h1>Recent Orders</h1>
+                    <div class="dashboard-card">
+                        <div class="orders-list">
+                            <div class="order-item">
+                                <div class="order-header">
+                                    <h3>Order #12345</h3>
+                                    <span class="order-status status-pending">Pending</span>
+                                </div>
+                                <p class="order-meta">Customer: John Doe | Total: $45.99 | Date: Jan 15, 2024</p>
+                                <button class="btn btn-small btn-secondary">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Analytics Section -->
+                <section id="analytics-section" class="dashboard-section">
+                    <h1>Analytics</h1>
+                    <div class="analytics-grid">
+                        <div class="analytics-card">
+                            <div class="analytics-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div>
+                                <h3>Total Orders</h3>
+                                <p class="analytics-value" id="analyticsTotalOrders">0</p>
+                            </div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div>
+                                <h3>Active Customers</h3>
+                                <p class="analytics-value" id="analyticsCustomers">0</p>
+                            </div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div>
+                                <h3>Revenue (This Month)</h3>
+                                <p class="analytics-value" id="analyticsRevenue">$0</p>
+                            </div>
+                        </div>
+                        <div class="analytics-card">
+                            <div class="analytics-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div>
+                                <h3>Average Rating</h3>
+                                <p class="analytics-value" id="analyticsRating">0/5</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings-section" class="dashboard-section">
+                    <h1>Settings</h1>
+                    <div class="dashboard-card">
+                        <h2>Notification Preferences</h2>
+                        <div class="settings-option">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" checked>
+                                <span>Email notifications for new orders</span>
+                            </label>
+                        </div>
+                        <div class="settings-option">
+                            <label class="checkbox-wrapper">
+                                <input type="checkbox" checked>
+                                <span>SMS alerts for urgent messages</span>
+                            </label>
+                        </div>
+
+                        <h2 style="margin-top: 30px;">Account Management</h2>
+                        <button class="btn btn-secondary" onclick="changePassword()">Change Password</button>
+                        <button class="btn btn-danger" onclick="deleteAccount()" style="margin-left: 10px;">Delete Account</button>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 RatishPlug. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="vendor-dashboard.js"></script>
+</body>
+</html>

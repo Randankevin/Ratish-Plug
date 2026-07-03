@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Registration - RatishPlug</title>
+    <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+    <link rel="apple-touch-icon" href="assets/icons/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+    <script src="supabase.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">
+                <img src="assets/icons/favicon.png" alt="RatishPlug" class="nav-logo">
+                <span class="nav-title">RatishPlug</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="buyer-search.html" class="nav-link">For Buyers</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="auth-section vendor-register">
+            <div class="auth-card">
+                <h1>Become a Vendor</h1>
+                <p class="subtitle">Join our marketplace and start selling</p>
+
+                <!-- Google Login (Required for Vendors) -->
+                <div class="google-auth-section">
+                    <p class="auth-required">
+                        <i class="fas fa-lock"></i> Google authentication is required to create a vendor account
+                    </p>
+                    <div id="google_signin_button" class="google-button"></div>
+                </div>
+
+                <!-- Vendor Registration Form -->
+                <form id="vendorForm" class="form auth-form" style="display: none;">
+                    <div class="form-section">
+                        <h2>Business Information</h2>
+                        
+                        <div class="form-group">
+                            <label for="businessName">Business Name *</label>
+                            <input type="text" id="businessName" name="businessName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="businessCategory">Business Category *</label>
+                            <select id="businessCategory" name="businessCategory" required>
+                                <option value="">Select a category</option>
+                                <option value="food">Food &amp; Beverages</option>
+                                <option value="retail">Retail &amp; Fashion</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="services">Services</option>
+                                <option value="grocery">Grocery &amp; Supplies</option>
+                                <option value="handmade">Handmade &amp; Crafts</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Business Description *</label>
+                            <textarea id="description" name="description" rows="4" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactPhone">Contact Phone *</label>
+                            <input type="tel" id="contactPhone" name="contactPhone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactEmail">Email *</label>
+                            <input type="email" id="contactEmail" name="contactEmail" required>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2>Business Location &amp; Delivery Zones</h2>
+
+                        <div class="form-group">
+                            <label for="businessAddress">Business Address *</label>
+                            <input type="text" id="businessAddress" name="businessAddress" placeholder="Enter your business address" required>
+                            <small>Search will help you locate on the map</small>
+                        </div>
+
+                        <div id="map-container" style="display: none;">
+                            <div id="vendor-map" style="width: 100%; height: 300px; margin: 15px 0; border-radius: 8px;"></div>
+                            <p class="map-info">Click on the map to set your exact business location</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="deliveryRadius">Delivery Radius (km) *</label>
+                            <input type="number" id="deliveryRadius" name="deliveryRadius" min="1" max="50" value="5" required>
+                            <small>How far can you deliver?</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Delivery Zones *</label>
+                            <div class="zone-selection">
+                                <div class="zone-option">
+                                    <input type="checkbox" id="zone1" name="zones" value="zone-north">
+                                    <label for="zone1">North Zone</label>
+                                </div>
+                                <div class="zone-option">
+                                    <input type="checkbox" id="zone2" name="zones" value="zone-south">
+                                    <label for="zone2">South Zone</label>
+                                </div>
+                                <div class="zone-option">
+                                    <input type="checkbox" id="zone3" name="zones" value="zone-east">
+                                    <label for="zone3">East Zone</label>
+                                </div>
+                                <div class="zone-option">
+                                    <input type="checkbox" id="zone4" name="zones" value="zone-west">
+                                    <label for="zone4">West Zone</label>
+                                </div>
+                                <div class="zone-option">
+                                    <input type="checkbox" id="zone5" name="zones" value="zone-central">
+                                    <label for="zone5">Central Zone</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="operatingHours">Operating Hours *</label>
+                            <div class="time-inputs">
+                                <input type="time" id="openingTime" name="openingTime" required>
+                                <span>to</span>
+                                <input type="time" id="closingTime" name="closingTime" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2>Additional Information</h2>
+
+                        <div class="form-group">
+                            <label for="businessLicense">Business License/Registration Number</label>
+                            <input type="text" id="businessLicense" name="businessLicense">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="website">Website (Optional)</label>
+                            <input type="url" id="website" name="website" placeholder="https://example.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                                I agree to the Terms of Service and Privacy Policy
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                        Create Vendor Account
+                    </button>
+
+                    <p class="form-footer">By registering, you agree to our platform policies and delivery standards</p>
+                </form>
+
+                <div id="registrationSuccess" class="success-message" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <h2>Welcome to RatishPlug!</h2>
+                    <p>Your vendor account has been created successfully.</p>
+                    <a href="vendor-dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Vendor Support</h4>
+                    <p>Email: vendor@ratishplug.com</p>
+                    <p>Phone: +1 (555) 123-4567</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 RatishPlug. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="vendor-auth.js"></script>
+</body>
+</html>
